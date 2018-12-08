@@ -7,7 +7,7 @@ library(growthcurver)
 #Labeling raw data with times and treatment types
 #Attention:Download file alongside script from Github
 #Adjust import to your own computer download location
-NOV1518rawdata<-as.data.frame(read.csv("~/Documents/15NOV18SPdata.csv"))
+NOV1518rawdata<-as.data.frame(read.csv("~/Documents/15NOV18SPdata.csv", quote=""))
 NOV1518timedata<-NOV1518rawdata
 NOV1518timedata$Time<-c(0,0.25,0.5,0.75,
                        1,1.25,1.5,1.75,2,2.25,2.5,2.75,3,3.25,3.5,3.75,4,4.25,4.5,4.75,5,5.25,5.5,5.75,6,6.25,6.5,6.75,7,
@@ -113,20 +113,20 @@ MtUV60hourlybars<-rbind(MtUV60hourly[1,],NA,NA,NA,MtUV60hourly[2,],NA,NA,NA,MtUV
                         MtUV60hourly[13,],NA,NA,NA,MtUV60hourly[14,],NA,NA,NA,MtUV60hourly[15,],NA,NA,NA,MtUV60hourly[16,],NA,NA,NA,
                         MtUV60hourly[17,])
 
-#Plot if averages without offset error bars
+#Plot of averages without offset error bars
 Averagesplot<-ggplot(YGCAverages, aes(Time))+
-  geom_line(aes(y=WtCON, colour="WtCON"), color="orange", position = pd)+
-  geom_line(aes(y=WtUV30, colour="WtUV30"), color="black", position = pd)+
-  geom_line(aes(y=WtUV60, colour="WtUV60"), color="cyan", position = pd)+
-  geom_line(aes(y=MtCON, colour="MtCON"), color="green", position = pd)+
-  geom_line(aes(y=MtUV30, colour="MtUV30"), color="blue", position = pd)+
-  geom_line(aes(y=MtUV60, colour="MtUV60"), color="red", position = pd)+
-  geom_errorbar(aes(ymin=MtUV60hourlybars$means-MtUV60hourlybars$sd, ymax=MtUV60hourlybars$means+MtUV60hourlybars$sd), color="red", position = pd)+
-                  geom_errorbar(aes(ymin=MtUV30hourlybars$means-MtUV30hourlybars$sd, ymax=MtUV30hourlybars$means+MtUV30hourlybars$sd), color="blue", position = pd)+
-                  geom_errorbar(aes(ymin=MtCONhourlybars$means-MtCONhourlybars$sd, ymax=MtCONhourlybars$means+MtCONhourlybars$sd), color="green", position = pd)+
-                  geom_errorbar(aes(ymin=WtCONhourlybars$means-WtCONhourlybars$sd, ymax=WtCONhourlybars$means+WtCONhourlybars$sd), color="orange", position = pd)+
-                  geom_errorbar(aes(ymin=WtUV60hourlybars$means-WtUV60hourlybars$sd, ymax=WtUV60hourlybars$means+WtUV60hourlybars$sd), color="cyan", position = pd)+
-                  geom_errorbar(aes(ymin=WtUV30hourlybars$means-WtUV30hourlybars$sd, ymax=WtUV30hourlybars$means+WtUV30hourlybars$sd), position = pd)
+  geom_line(aes(y=WtCON, colour="WtCON"), color="orange")+
+  geom_line(aes(y=WtUV30, colour="WtUV30"), color="black")+
+  geom_line(aes(y=WtUV60, colour="WtUV60"), color="cyan")+
+  geom_line(aes(y=MtCON, colour="MtCON"), color="green")+
+  geom_line(aes(y=MtUV30, colour="MtUV30"), color="blue")+
+  geom_line(aes(y=MtUV60, colour="MtUV60"), color="red")+
+  geom_errorbar(aes(ymin=MtUV60hourlybars$means-MtUV60hourlybars$sd, ymax=MtUV60hourlybars$means+MtUV60hourlybars$sd), color="red")+
+                  geom_errorbar(aes(ymin=MtUV30hourlybars$means-MtUV30hourlybars$sd, ymax=MtUV30hourlybars$means+MtUV30hourlybars$sd), color="blue")+
+                  geom_errorbar(aes(ymin=MtCONhourlybars$means-MtCONhourlybars$sd, ymax=MtCONhourlybars$means+MtCONhourlybars$sd), color="green")+
+                  geom_errorbar(aes(ymin=WtCONhourlybars$means-WtCONhourlybars$sd, ymax=WtCONhourlybars$means+WtCONhourlybars$sd), color="orange")+
+                  geom_errorbar(aes(ymin=WtUV60hourlybars$means-WtUV60hourlybars$sd, ymax=WtUV60hourlybars$means+WtUV60hourlybars$sd), color="cyan")+
+                  geom_errorbar(aes(ymin=WtUV30hourlybars$means-WtUV30hourlybars$sd, ymax=WtUV30hourlybars$means+WtUV30hourlybars$sd))
 
 #Data frames to create offset error bars for easier graph viewing
 MtUV30hourlyoffset<-MtUV30stats[c(2,6,10,14,18,22,26,30,34,38,42,46,50,54,58,62),]
@@ -238,16 +238,16 @@ yM3<-aM3/(1+exp(-(bM3+cM3*x)))
 predictM3<-data.frame(xM3,yM3)
 ggplot(data=YGCAverages,aes(x=Time,y=MtUV30))+geom_point()+geom_line(data = predictM3,aes(x=xM3,y=yM3), size=1)
 
-lm(YGCAverages$MtUV60~YGCAverages$Time)
-theabsolutewitMtUV60<-nlsLM(log(MtUV60)~log(ph1/(1+exp(-(ph2+ph3*Time)))),
-                                start=list(ph1=0.135,ph2=-0.015283,ph3=0.003767),data=YGCAverages,trace=TRUE)
-newwitMtUV60<-nlsLM(MtUV60~(ph1/(1+exp(-(ph2+ph3*Time)))), YGCAverages, start = coef(theabsolutewitMtUV60))
-aM6<-coef(newwitMtUV60)[1]
-bM6<-coef(newwitMtUV60)[2]
-cM6<-coef(newwitMtUV60)[3]
-xM6<-c(min(YGCAverages$Time):max(YGCAverages$Time))
-yM6<-aM6/(1+exp(-(bM6+cM6*x)))
-predictM6<-data.frame(xM6,yM6)
-ggplot(data=YGCAverages,aes(x=Time,y=MtUV60))+geom_point()+geom_line(data = predictM6,aes(x=xM6,y=yM6), size=1)
+#lm(YGCAverages$MtUV60~YGCAverages$Time)
+#theabsolutewitMtUV60<-nlsLM(log(MtUV60)~log(ph1/(1+exp(-(ph2+ph3*Time)))),
+#                                start=list(ph1=0.135,ph2=-0.015283,ph3=0.003767),data=YGCAverages,trace=TRUE)
+#newwitMtUV60<-nlsLM(MtUV60~(ph1/(1+exp(-(ph2+ph3*Time)))), YGCAverages, start = coef(theabsolutewitMtUV60))
+#aM6<-coef(newwitMtUV60)[1]
+#bM6<-coef(newwitMtUV60)[2]
+#cM6<-coef(newwitMtUV60)[3]
+#xM6<-c(min(YGCAverages$Time):max(YGCAverages$Time))
+#yM6<-aM6/(1+exp(-(bM6+cM6*x)))
+#predictM6<-data.frame(xM6,yM6)
+#ggplot(data=YGCAverages,aes(x=Time,y=MtUV60))+geom_point()+geom_line(data = predictM6,aes(x=xM6,y=yM6), size=1)
 
 
