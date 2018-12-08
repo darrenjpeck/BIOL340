@@ -5,6 +5,8 @@ library(minpack.lm)
 library(statmod)
 library(growthcurver)
 #Labeling raw data with times and treatment types
+#Attention:Download file alongside script from Github
+#Adjust import to your own computer download location
 NOV1518rawdata<-as.data.frame(read.csv("~/Documents/15NOV18SPdata.csv"))
 NOV1518timedata<-NOV1518rawdata
 NOV1518timedata$Time<-c(0,0.25,0.5,0.75,
